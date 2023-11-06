@@ -1,7 +1,7 @@
 """Checks the repository for updates."""
 import os
 import requests
-import imp
+from importlib.util import find_spec, spec_from_file_location
 from tqdm import tqdm
 from pkg_resources import parse_version
 from retriever.lib.defaults import (REPOSITORY, RETRIEVER_REPOSITORY, SCRIPT_WRITE_PATH,

@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import imp
+from importlib.util import find_spec, spec_from_file_location
 import os
 import shlex
 import shutil
