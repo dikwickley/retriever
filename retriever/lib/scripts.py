@@ -7,7 +7,6 @@ import json
 import requests
 import difflib
 from importlib.util import find_spec, spec_from_file_location
-from importlib import spec_from_file_location
 from os.path import join, exists
 from collections import OrderedDict
 
