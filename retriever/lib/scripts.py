@@ -1,5 +1,4 @@
 import csv
-import imp
 import io
 import os
 import re
@@ -7,6 +6,8 @@ import sys
 import json
 import requests
 import difflib
+from importlib.util import find_spec, spec_from_file_location
+from importlib import spec_from_file_location
 from os.path import join, exists
 from collections import OrderedDict
 
@@ -80,9 +81,9 @@ def reload_scripts():
             script_name = ".".join(script.split(".")[:-1])
             if script_name not in loaded_files:
                 loaded_files.append(script_name)
-                file, pathname, desc = imp.find_module(script_name, [search_path])
+                file, pathname, desc = find_spec(script_name, [search_path])
                 try:
-                    new_module = imp.load_module(script_name, file, pathname, desc)
+                    new_module = spec_from_file_location(script_name, file, pathname, desc)
                     if not hasattr(new_module, "SCRIPT"):
                         continue
                     if hasattr(new_module.SCRIPT, "retriever_minimum_version"):
@@ -274,8 +275,8 @@ def get_script_upstream(dataset, repo=REPOSITORY):
         setattr(read_script, "_file", os.path.join(SCRIPT_WRITE_PATH, script_name))
         setattr(read_script, "_name", script)
         return read_script
-    file, pathname, desc = imp.find_module(script, [SCRIPT_WRITE_PATH])
-    new_module = imp.load_module(script, file, pathname, desc)
+    file, pathname, desc = find_spec(script, [SCRIPT_WRITE_PATH])
+    new_module = spec_from_file_location(script, file, pathname, desc)
     setattr(new_module.SCRIPT, "_file", os.path.join(SCRIPT_WRITE_PATH, script_name))
     setattr(new_module.SCRIPT, "_name", script)
     return new_module.SCRIPT
@@ -461,9 +462,9 @@ def read_json_version(json_file):
 
 def read_py_version(script_name, search_path):
     """Read the version of a script from a python file"""
-    file, pathname, desc = imp.find_module(script_name, [search_path])
+    file, pathname, desc = find_spec(script_name, [search_path])
     try:
-        new_module = imp.load_module(script_name, file, pathname, desc)
+        new_module = spec_from_file_location(script_name, file, pathname, desc)
         if hasattr(new_module.SCRIPT, "version"):
             return new_module.SCRIPT.version
     except:

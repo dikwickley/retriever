@@ -143,9 +143,9 @@ def teardown_module():
 def get_script_module(script_name):
     """Load a script module"""
     if script_name in python_files:
-        file, pathname, desc = imp.find_module(script_name,
+        file, pathname, desc = find_spec(script_name,
                                                [working_script_dir])
-        return imp.load_module(script_name + '.py', file, pathname, desc)
+        return spec_from_file_location(script_name + '.py', file, pathname, desc)
     return read_json(os.path.join(retriever_root_dir, 'scripts', script_name))
 
 

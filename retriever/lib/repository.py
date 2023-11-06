@@ -59,9 +59,9 @@ def check_for_updates(repo=REPOSITORY):
                 _download_from_repository("scripts/" + script_name, download_path, repo)
             need_to_download = False
             try:
-                file_object, pathname, desc = imp.find_module(
+                file_object, pathname, desc = find_spec(
                     ''.join(script_name.split('.')[:-1]), [SCRIPT_WRITE_PATH])
-                new_module = imp.load_module(script_name, file_object, pathname, desc)
+                new_module = spec_from_file_location(script_name, file_object, pathname, desc)
                 m = str(new_module.SCRIPT.version)
                 need_to_download = parse_version(str(script_version)) > parse_version(m)
             except:
